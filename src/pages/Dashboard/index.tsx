@@ -1,6 +1,6 @@
 import React, {useEffect, useState, FormEvent} from 'react';
 import {Title, Form, Repositories, Error} from './styles';
-
+import {Link} from 'react-router-dom';
 import api from '../../services/api';
 
 import {FiChevronRight} from 'react-icons/fi';
@@ -18,6 +18,7 @@ interface Repository {
 
 const Dashboard: React.FC = () => {
 	const [newRepo, setNewRepo] = useState('');
+
 	const [repositories, setRespositories] = useState<Repository[]>(() => {
 		const storagedRepositories = localStorage.getItem('@explorer:repositories');
 
@@ -65,7 +66,7 @@ const Dashboard: React.FC = () => {
 				<input
 					value={newRepo}
 					onChange={e => setNewRepo(e.target.value)}
-					placeholder="Nome do repositório..."
+					placeholder="owner/repository..."
 				/>
 				<button type="submit">Pesquisar</button>
 			</Form>
@@ -74,7 +75,7 @@ const Dashboard: React.FC = () => {
 
 			<Repositories>
 				{repositories.map(repository => (
-					<a key={repository.id} href="#">
+					<Link key={repository.id} to={`/repository/${repository.full_name}`}>
 						<img
 							src={repository.owner.avatar_url}
 							alt={repository.owner.login}
@@ -85,7 +86,7 @@ const Dashboard: React.FC = () => {
 							<p>{repository.description}</p>
 						</div>
 						<FiChevronRight size='25px' />
-					</a>
+					</Link>
 				))}
 			</Repositories>
 		</>
