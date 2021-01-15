@@ -18,7 +18,15 @@ interface Repository {
 
 const Dashboard: React.FC = () => {
 	const [newRepo, setNewRepo] = useState('');
-	const [repositories, setRespositories] = useState<Repository[]>([]);
+	const [repositories, setRespositories] = useState<Repository[]>(() => {
+		const storagedRepositories = localStorage.getItem('@explorer:repositories');
+
+		if(storagedRepositories) {
+			return JSON.parse(storagedRepositories);
+		} else {
+			return [];
+		}
+	});
 	const [error, setError] = useState('');
 
 	async function handleAddRepository(e: FormEvent<HTMLFormElement>): Promise<void> {
@@ -45,8 +53,8 @@ const Dashboard: React.FC = () => {
 	}
 
 	useEffect( () => {
-
-	}, [])
+		localStorage.setItem('@explorer:repositories', JSON.stringify(repositories))
+	}, [repositories])
 
 	return(
 		<>
